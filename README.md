@@ -128,6 +128,8 @@ The ruling for absolute or relative imports is as follows:
 
 TL;DR - relative imports inside a domain, absolute for everything else!
 
+With this ruling domains are easy to package and move around. When it comes time to move it into it's own project; tidying up imports will be one less thing you have to do.
+
 ## Which logic lives where?
 
 It's common in programming to end up confused about what type of logic should live where - should it go in the `apis.py`, the `models.py`, or the `services.py`? There are many cases where it's difficult to decide, and the best advice is to **pick a pattern and stick to it**, but for simpler things, this guide emphasises the following:
