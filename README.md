@@ -5,6 +5,7 @@
 | Version | Author(s)                                 | Date       |
 | ------- |-------------------------------------------|------------|
 | 1.0     | Paul Hallett  paulandrewhallett@gmail.com | 01-02-2019 |
+| 1.1     | Paul Hallett  paulandrewhallett@gmail.com | DRAFT      |
 
 
 **Table of contents:**
@@ -17,6 +18,7 @@
 - [Styleguide](#styleguide)
   - [Visualisation](#visualisation)
   - [File structure](#file-structure)
+  - [Which logic lives where?](#which-logic-lives-where)
 - [Files in-depth](#files-in-depth)
   - [Models](#models)
   - [APIs](#apis)
@@ -43,17 +45,17 @@ In order to overcome these problems, this styleguide tries to achieve the follow
 
 1) Treat Django's `apps` more like software `domains`.
 2) Extend Django's `apps` implementation to support strong [bounded context](https://www.martinfowler.com/bliki/BoundedContext.html) patterns between `domains`.
-3) Enable separation of domains to happen when it makes sense for **increased development velocity**, not just for **business logic**.
+3) Enable separation of domains to happen when it makes sense for **increased development velocity**, not just for **business value**.
 4) Design a styleguide that reduces the effort involved in extracting the code for large domains into separate application servers.
 5) Make sure the styleguide compliments API-based applications.
 
 ## Domains
 
-A [domain](https://en.wikipedia.org/wiki/Domain_(software_engineering)) is considered a distinct _business problem_ within the context of your application.
+A [domain](https://en.wikipedia.org/wiki/Domain_(software_engineering)) provides distinct business value within the context of your application.
 
 Within the context of software, what this styleguide calls a `domain` is roughly an extension of what Django would call an "app". Therefore a _business_ domain **should** have at least one distinct _software_ domain mirroring it.
 
-The examples below will talk about a business problem for a `book shop` that must share details about books. This can be modelled as a _domain_ called `books`, and as a _software domain_ also called `books`.
+The examples below will talk about a `book shop` that must share details about books. This can be modelled as a _domain_ called `books`, and as a _software domain_ also called `books`.
 
 We keep the key benefits of Django's `app` pattern - namely Django's [models](https://docs.djangoproject.com/en/2.1/topics/db/models/) to represent tables in a datastore, with an emphasis on **skinny models**. We also retain Django's ability to *package apps as installable components in other applications*. This allows domains to be easily migrated to different codebases or completely different projects.
 
@@ -76,10 +78,10 @@ An example _software_ domain is provided in the same directory as this styleguid
 A domain **must** use the following file structure:
 
 ```
-apis.py - Public functions and access points.
+apis.py - Public functions and access points, presentation logic.
 interfaces.py - Integrations with other domains or external services.
-models.py - Object models and storage.
-services.py - Business and functional logic.
+models.py - Object models and storage, simple information logic.
+services.py - coordination and transactional logic.
 ```
 
 In addition, any existing files from a standard Django app are still allowed, such as `urls.py`, `apps.py` and `migrations/*`. `Views.py` in [Django's pattern](https://docs.djangoproject.com/en/dev/#the-view-layer) is **explicitly not allowed** in this styleguide pattern as we only focus on API-based applications. Most logic that used to live in Django's `views.py` would now be separated into `apis.py` and `services.py`.
@@ -110,9 +112,17 @@ from domain.apis import Foo
 
 This keeps namespaces tidy and does not leak domain details.
 
-* A domain **does not** need to have all these files if it is not using them. For example - a domain that just co-ordinates API calls to other domains does not need to have `models.py` as it is probably not storing anything in a datastore.
+* A domain **does not** need to have all these files if it is not using them. For example - a domain that just coordinates API calls to other domains does not need to have `models.py` as it is probably not storing anything in a datastore.
 
 * A domain **can have** additional files when it makes sense (such as `utils.py` or `enums.py` or `serializers.py`) to separate out parts of the code that aren't covered by the styleguide pattern.
+
+## Which logic lives where?
+
+It's common in programming to end up confused about what type of logic should live where - should it go in the `apis.py`, the `models.py`, or the `services.py`? There are many cases where it's difficult to decide, and the best advice is to **pick a pattern and stick to it**, but for simpler things, this guide emphasises the following:
+
+- apis.py - logic about presentation (Where should I show this data to the user? Where do I define the API schema?)
+- services.py - logic around coordination and transactions (Where do I coordinate updating many models in one domain? Where do I dispatch a single action out to other domains?)
+- models.py - logic around information (Where can I store this data? Where can I do any post/pre-save actions?) and derived information computed by already existing information
 
 <hr>
 
@@ -122,7 +132,7 @@ In the examples below we imagine a service with two domains - one for books, and
 
 ## Models
 
-Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use _skinny models_ - no functional or business logic should live here. In the past Django has recommended an [active record](https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models) style for it's models. In practice, we have found that this encourages developers to make `models.py` bloated and do too much - often binding the presentation and business logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase.
+Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use _skinny models_ - no complex functional logic should live here. In the past Django has recommended an [active record](https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models) style for it's models. In practice, we have found that this encourages developers to make `models.py` bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the _"Where should logic live?"_ section above for clarification.
 
 A models.py file can look like:
 
@@ -144,10 +154,11 @@ class Book(models.Model):
 
 ```
 
-- Models **must not** have any complex business logic functions attached to them.
+- Models **must not** have any complex functional logic in them.
+- Models **should** own informational logic related to them.
 - Models **can** have computed properties where it makes sense.
 - Models **must not** import services, interfaces, or apis from their own domain or other domains.
-- Table dependencies (such as ForeignKeys) **must not** exist across domains. Use a UUID field instead, and have your `services.py` control the relationship between models. You **can** use ForeignKeys between tables in one domain. Be aware that this might hinder future refactoring.
+- Table dependencies (such as ForeignKeys) **must not** exist across domains. Use a UUID field instead, and have your Services control the relationship between models. You **can** use ForeignKeys between tables in one domain. Be aware that this might hinder future refactoring.
 
 
 ## APIs
@@ -175,26 +186,26 @@ class BookAPI:
 
 ```
 
-- `Apis.py` **must be** used as the entry point for all other consumers who wish to use this domain.
-- Internal APIs **should** just be functions.
+- APIs **must be** used as the entry point for all other consumers who wish to use this domain.
+- APIs **should** own presentational logic and schema declarations.
+- Internal domain-to-domain APIs **should** just be functions.
 - You **can** group interal API functions under a class if it makes sense for organisation.
 - If you are using a class for your internal APIs, it **must** use the naming convention `MyDomainAPI`.
-- Internal functions in apis.py **must** use type annotations.
-- Internal functions in apis.py **must** use keyword arguments.
+- Internal functions in APIs **must** use type annotations.
+- Internal functions in APIs **must** use keyword arguments.
 - You **should** log API call functions.
-- All data returned from `apis.py` **must be** JSON serializable.
-- `Apis.py` **must** talk to `services.py` to get data.
-- It **must not** talk to `models.py` directly.
-- It **must not** do any business logic.
-- `Apis.py` **can** do simple business logic like transforming data for the outside world, or taking external data and transforming it for the domain to understand.
-- Objects represented through the API **do not** have to map directly to internal database representations of data.
+- All data returned from APIs **must be** JSON serializable.
+- APIs **must** talk to Services to get data.
+- APIs **must not** talk to Models directly.
+- APIs **should** do simple logic like transforming data for the outside world, or taking external data and transforming it for the domain to understand.
+- Objects represented through APIs **do not** have to map directly to internal database representations of data.
 
 
 ## Interfaces
 
-Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define **all interactions with it in the interfaces.py file**. Combined with `apis.py` (see above), this forms the bounded context of the domain, and prevents business logic leaking in.
+Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define **all interactions with it in the interfaces.py file**. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.
 
-Consider interfaces.py like a mini _Anti-Corruption Layer_. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the `interfaces.py` to reflect the change. No complex refactoring needed, woohoo!
+Consider interfaces.py like a mini _Anti-Corruption Layer_. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in `interfaces.py` to reflect the change. No complex refactoring needed, woohoo!
 
 An interfaces.py may look like:
 
@@ -234,23 +245,23 @@ class AuthorInterface:
 
 ```
 
-- The primary components of interfaces.py **should** be functions.
+- The primary components of Interfaces **should** be functions.
 - You **can** group functions under a class if it makes sense for organisation.
 - If you are using a class, it **must** use the naming convention `MyDomainInterface`.
-- Functions in interfaces.py **must** use type annotations.
-- Functions in interfaces.py **must** use keyword arguments.
+- Functions in Interfaces **must** use type annotations.
+- Functions in Interfaces **must** use keyword arguments.
 
 ## Services
 
-Everything in a domain comes together in `services.py`.
+Everything in a domain comes together in Services.
 
-Services defines all the business-problem logic that might be needed for this domain. What is considered a bussiness-problem? Here are a few examples:
+Services gather all the business value for this domain. What type of logic should live here? Here are a few examples:
 
 - When creating a new instance of a model, we need to compute a field on it before saving.
 - When querying some content, we need to collect it from a few different places and gather it together in a python object.
 - When deleting an instance we need to send a signal to another domain so it can do it's own logic.
 
-Anything that is specific to the domain problem should live in `services.py`. As most API projects expose single functional actions such as Create, Read, Update, and Delete, `services.py` has been designed specifically to compliment stateless, single-action functions.
+Anything that is specific to the domain problem and **not** basic informational logic should live in Services. As most API projects expose single functional actions such as Create, Read, Update, and Delete, Services has been designed specifically to compliment stateless, single-action functions.
 
 A services.py file could look like:
 
@@ -317,7 +328,8 @@ class PGMNodeService:
 
 ```
 
-- The primary components of `services.py` **should** be functions.
+- The primary components of Services **should** be functions.
+- Services **should** own co-ordination and transactional logic.
 - You **can** group functions under a class if it makes sense for organisation.
 - If you are using a class, it **must** use the naming convention `MyDomainService`.
 - Functions in services.py **must** use type annotations.
