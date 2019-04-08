@@ -81,7 +81,7 @@ A domain **must** use the following file structure:
 apis.py - Public functions and access points, presentation logic.
 interfaces.py - Integrations with other domains or external services.
 models.py - Object models and storage, simple information logic.
-services.py - coordination and functional logic.
+services.py - coordination and transactional logic.
 ```
 
 In addition, any existing files from a standard Django app are still allowed, such as `urls.py`, `apps.py` and `migrations/*`. `Views.py` in [Django's pattern](https://docs.djangoproject.com/en/dev/#the-view-layer) is **explicitly not allowed** in this styleguide pattern as we only focus on API-based applications. Most logic that used to live in Django's `views.py` would now be separated into `apis.py` and `services.py`.
@@ -122,7 +122,7 @@ It's common in programming to end up confused about what type of logic should li
 
 - apis.py - logic about presentation (Where should I show this data to the user? Where do I define the API schema?)
 - services.py - logic around coordination and transactions (Where do I coordinate updating many models in one domain? Where do I dispatch a single action out to other domains?)
-- models.py - logic around information (Where can I store this data? Where can I do any post/pre-save actions?)
+- models.py - logic around information (Where can I store this data? Where can I do any post/pre-save actions?) and derived information computed by already existing information
 
 <hr>
 
