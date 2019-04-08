@@ -18,6 +18,7 @@
 - [Styleguide](#styleguide)
   - [Visualisation](#visualisation)
   - [File structure](#file-structure)
+  - [Absolute or Relative imports?](#absolute-or-relative-imports)
   - [Which logic lives where?](#which-logic-lives-where)
 - [Files in-depth](#files-in-depth)
   - [Models](#models)
@@ -115,6 +116,17 @@ This keeps namespaces tidy and does not leak domain details.
 * A domain **does not** need to have all these files if it is not using them. For example - a domain that just coordinates API calls to other domains does not need to have `models.py` as it is probably not storing anything in a datastore.
 
 * A domain **can have** additional files when it makes sense (such as `utils.py` or `enums.py` or `serializers.py`) to separate out parts of the code that aren't covered by the styleguide pattern.
+
+## Absolute or Relative imports?
+
+The ruling for absolute or relative imports is as follows:
+
+* When importing files within a domain, you **must** use relative imports.
+* When importing other domains in the same project, you **must** use absolute imports.
+* When importing domains in tests, you **should** use absolute imports.
+* When importing third-party packages you **should** use absolute imports.
+
+TL;DR - relative imports inside a domain, absolute for everything else!
 
 ## Which logic lives where?
 
