@@ -1,7 +1,5 @@
 # Django API Domains styleguide
 
-**Current version**: 1.0
-
 | Version | Author(s)                                 | Date       |
 | ------- |-------------------------------------------|------------|
 | 1.0     | Paul Hallett  paulandrewhallett@gmail.com | 01-02-2019 |
