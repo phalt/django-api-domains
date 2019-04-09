@@ -5,7 +5,7 @@
 | Version | Author(s)                                 | Date       |
 | ------- |-------------------------------------------|------------|
 | 1.0     | Paul Hallett  paulandrewhallett@gmail.com | 01-02-2019 |
-| 1.1     | Paul Hallett  paulandrewhallett@gmail.com | DRAFT      |
+| 1.1     | Paul Hallett  paulandrewhallett@gmail.com | 09-04-2019 |
 
 
 **Table of contents:**
