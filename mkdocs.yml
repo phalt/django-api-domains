@@ -1,0 +1,5 @@
+site_name: Django API Domains
+theme: readthedocs
+
+pages:
+    - Home: 'index.md'
