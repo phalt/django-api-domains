@@ -1,4 +1,7 @@
-# Django API Domains styleguide
+![logo.png](diagrams/dads_logo.png)
+
+# Django API Domains
+_Style guides for the API age_
 
 | Version | Author(s)                                 | Date       |
 | ------- |-------------------------------------------|------------|
@@ -10,7 +13,7 @@
 
 <!-- toc -->
 
-- [Django API Domains styleguide](#django-api-domains-styleguide)
+- [Django API Domains](#django-api-domains)
   - [Introduction](#introduction)
   - [Domains](#domains)
 - [Styleguide](#styleguide)
