@@ -65,7 +65,7 @@ class BookAPI:
 - Internal functions in APIs **must** use type annotations.
 - Internal functions in APIs **must** use keyword arguments.
 - You **should** log API call functions.
-- All data returned from APIs **must be** JSON serializable.
+- All data returned from APIs **must be** serializable.
 - APIs **must** talk to Services to get data.
 - APIs **must not** talk to Models directly.
 - APIs **should** do simple logic like transforming data for the outside world, or taking external data and transforming it for the domain to understand.
