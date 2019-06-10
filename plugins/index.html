@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Domains - Django API Domains</title>
+  <title>Plugins - Django API Domains</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Domains";
-    var mkdocs_page_input_path = "domains.md";
+    var mkdocs_page_name = "Plugins";
+    var mkdocs_page_input_path = "plugins.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -58,23 +58,9 @@
     <a class="" href="../using/">Using this guide</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Domains</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#domains">Domains</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#examples-in-this-guide">Examples in this guide</a></li>
-        
-            <li><a class="toctree-l3" href="#domain-rules">Domain rules</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../domains/">Domains</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -92,9 +78,18 @@
     <a class="" href="../examples/">Examples</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../plugins/">Plugins</a>
+    <a class="current" href="./">Plugins</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#django-rest-framework">Django REST Framework</a></li>
+    
+
+    <li class="toctree-l2"><a href="#graphene-django">Graphene Django</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -134,7 +129,7 @@
     
       
     
-    <li>Domains</li>
+    <li>Plugins</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -144,24 +139,30 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="domains">Domains</h1>
-<p>A <a href="https://en.wikipedia.org/wiki/Domain_(software_engineering)">domain</a> is a piece of software that provides distinct business value within the context of your application.</p>
-<p>Within the context of software, what this styleguide calls a <code>domain</code> is roughly an extension of what Django would call an <code>app</code>. Therefore a <em>business</em> domain <strong>should</strong> have at least one distinct <em>software</em> domain mirroring it.</p>
-<h2 id="examples-in-this-guide">Examples in this guide</h2>
-<p>The examples in this guide will talk about a <code>book shop</code> that must share details about books. This can be modelled as a <em>domain</em> called <code>books</code>, and as a <em>software domain</em> also called <code>books</code>.</p>
-<p>We keep the key benefits of Django's <code>app</code> pattern - namely Django's <a href="https://docs.djangoproject.com/en/2.1/topics/db/models/">models</a> to represent tables in a datastore, with an emphasis on <strong>skinny models</strong>. We also retain Django's ability to <em>package apps as installable components in other applications</em>. This allows domains to be easily migrated to different codebases or completely different projects.</p>
-<h2 id="domain-rules">Domain rules</h2>
-<p>There are two high-level rules around domains:</p>
-<ol>
-<li>You <strong>should</strong> split a domain if it becomes too big to work on.</li>
-</ol>
-<p>As a rule of thumb is that a domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking the software has not diverged too far from the styleguide.</p>
-<ol>
-<li>You <strong>should</strong> adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.</li>
-</ol>
-<p>This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between each other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.</p>
-<p>An example <em>software</em> domain is provided in the same directory as this styleguide under <a href="https://github.com/phalt/django-api-domains/tree/master/example_domain">example_domain/</a>.</p>
-<p>Next, we will discuss the styleguide in detail.</p>
+                <p>We recommend the following plugins for use with this guide.</p>
+<h2 id="django-rest-framework">Django REST Framework</h2>
+<p><a href="https://www.django-rest-framework.org/">Django REST Framework</a> is the de facto framework for building REST API services with Django.</p>
+<p>When using DRF, we can organise the logic in a domain this way:</p>
+<ul>
+<li><code>urls.py</code> - Router and URL configuration.</li>
+<li><code>apis.py</code> -  DRF view functions or view classes.</li>
+<li><code>serializers.py</code> - Serialization for models.</li>
+</ul>
+<p>Additional ruling for DRF:</p>
+<ul>
+<li>You <strong>should</strong> serialize all models using DRF serializers.</li>
+<li>You <strong>should not</strong> use the <a href="https://www.django-rest-framework.org/api-guide/generic-views/#mixins">ModelMixin</a> Viewsets as they will tightly couple the data layer with the presentation layer.</li>
+</ul>
+<h2 id="graphene-django">Graphene Django</h2>
+<p><a href="https://docs.graphene-python.org/projects/django/en/latest/">Graphene-Django</a> is the recommended framework for creating <a href="https://graphql.org/">GraphQL</a> APIs with Django.</p>
+<p>When using Graphen-Django, we can organis the logic in a domain this way:</p>
+<ul>
+<li><code>apis.py</code> - Queries and Mutations.</li>
+</ul>
+<p>Additional ruling for Graphene-Django:</p>
+<ul>
+<li>You <strong>should not</strong> tightly link an <code>DjangoObjectType</code> to a Django model as this will tightly couple the data layer with the presentation layer. Instead, use a generic <code>ObjectType</code>.</li>
+</ul>
               
             </div>
           </div>
@@ -169,10 +170,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../styleguide/" class="btn btn-neutral float-right" title="Styleguide">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../testing/" class="btn btn-neutral float-right" title="Testing">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../using/" class="btn btn-neutral" title="Using this guide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../examples/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -198,10 +199,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../using/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../examples/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../styleguide/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../testing/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
