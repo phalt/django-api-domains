@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Styleguide - Django API Domains</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Styleguide";
+    var mkdocs_page_input_path = "styleguide.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Django API Domains</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../domains/">Domains</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Styleguide</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#visualisation">Visualisation</a></li>
+    
+
+    <li class="toctree-l2"><a href="#file-structure">File structure</a></li>
+    
+
+    <li class="toctree-l2"><a href="#absolute-or-relative-imports">Absolute or Relative imports?</a></li>
+    
+
+    <li class="toctree-l2"><a href="#which-logic-lives-where">Which logic lives where?</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../files/">Files</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../examples/">Examples</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../testing/">Testing</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../appendix/">Appendix</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../contributing/">Contributing</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Django API Domains</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Styleguide</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="visualisation">Visualisation</h2>
+<p><img alt="diagrams/dads_main.png" src="https://raw.githubusercontent.com/phalt/django-api-domains/master/diagrams/dads_main.png" /></p>
+<h2 id="file-structure">File structure</h2>
+<ul>
+<li>A domain <strong>must</strong> use the following file structure:</li>
+</ul>
+<pre><code>apis.py - Public functions and access points, presentation logic.
+interfaces.py - Integrations with other domains or external services.
+models.py - Object models and storage, simple information logic.
+services.py - coordination and transactional logic.
+</code></pre>
+
+<p>In addition, any existing files from a standard Django app are still allowed, such as <code>urls.py</code>, <code>apps.py</code> and <code>migrations/*</code>. <code>Views.py</code> in <a href="https://docs.djangoproject.com/en/dev/#the-view-layer">Django's pattern</a> is <strong>explicitly not allowed</strong> in this styleguide pattern as we only focus on API-based applications. Most logic that used to live in Django's <code>views.py</code> would now be separated into <code>apis.py</code> and <code>services.py</code>.</p>
+<ul>
+<li>You <strong>can</strong> mask one of the required files as a directory for better file organisation. For example, you might want to split <code>apis.py</code> into this file structure:</li>
+</ul>
+<pre><code>apis/
+  __init__.py
+  rest.py
+  graphql.py
+</code></pre>
+
+<p>Your <code>__init__.py</code> file in this directory can import the local files:</p>
+<pre><code class="python"># apis/__init__.py
+from .rest import *  # noqa
+from .graphql import *  # noqa
+</code></pre>
+
+<p>Then, any other file can then import from apis like so:</p>
+<pre><code class="python"># example.py
+from domain.apis import Foo
+</code></pre>
+
+<p>This keeps namespaces tidy and does not leak domain details.</p>
+<ul>
+<li>
+<p>A domain <strong>does not</strong> need to have all these files if it is not using them. For example - a domain that just coordinates API calls to other domains does not need to have <code>models.py</code> as it is probably not storing anything in a datastore.</p>
+</li>
+<li>
+<p>A domain <strong>can have</strong> additional files when it makes sense (such as <code>utils.py</code> or <code>enums.py</code> or <code>serializers.py</code>) to separate out parts of the code that aren't covered by the styleguide pattern.</p>
+</li>
+</ul>
+<p>Read more about the files in the <a href="/files">files</a> section.</p>
+<h2 id="absolute-or-relative-imports">Absolute or Relative imports?</h2>
+<p>The ruling for absolute or relative imports is as follows:</p>
+<ul>
+<li>When importing files within a domain, you <strong>must</strong> use relative imports.</li>
+<li>When importing other domains in the same project, you <strong>must</strong> use absolute imports.</li>
+<li>When importing domains in tests, you <strong>should</strong> use absolute imports.</li>
+<li>When importing third-party packages you <strong>should</strong> use absolute imports.</li>
+</ul>
+<p>TL;DR - relative imports inside a domain, absolute for everything else!</p>
+<p>With this ruling domains are easy to package and move around. When it comes time to move it into it's own project; tidying up imports will be one less thing you have to do.</p>
+<h2 id="which-logic-lives-where">Which logic lives where?</h2>
+<p>It's common in programming to end up confused about what type of logic should live where - should it go in the <code>apis.py</code>, the <code>models.py</code>, or the <code>services.py</code>? There are many cases where it's difficult to decide, and the best advice is to <strong>pick a pattern and stick to it</strong>, but for simpler things, this guide emphasises the following:</p>
+<ul>
+<li><code>apis.py</code> - logic about presentation (Where should I show this data to the user? Where do I define the API schema?)</li>
+<li><code>services.py</code> - logic around coordination and transactions (Where do I coordinate updating many models in one domain? Where do I dispatch a single action out to other domains?)</li>
+<li><code>models.py</code> - logic around information (Where can I store this data? Where can I do any post/pre-save actions?) and derived information computed by already existing information</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../files/" class="btn btn-neutral float-right" title="Files">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../domains/" class="btn btn-neutral" title="Domains"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../domains/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../files/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

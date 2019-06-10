@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Files - Django API Domains</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Files";
+    var mkdocs_page_input_path = "files.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Django API Domains</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../domains/">Domains</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../styleguide/">Styleguide</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Files</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#models">Models</a></li>
+    
+
+    <li class="toctree-l2"><a href="#apis">APIs</a></li>
+    
+
+    <li class="toctree-l2"><a href="#interfaces">Interfaces</a></li>
+    
+
+    <li class="toctree-l2"><a href="#services">Services</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../examples/">Examples</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../testing/">Testing</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../appendix/">Appendix</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../contributing/">Contributing</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Django API Domains</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Files</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example <strong>we also assume a book can only have one author.</strong> It's a strange world.</p>
+<h2 id="models">Models</h2>
+<p>Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use <em>skinny models</em> - no complex functional logic should live here. In the past Django has recommended an <a href="https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models">active record</a> style for it's models. In practice, we have found that this encourages developers to make <code>models.py</code> bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the <em>"Where should logic live?"</em> section above for clarification.</p>
+<p>A models.py file can look like:</p>
+<pre><code class="python">import uuid
+from django.db import models
+
+
+class Book(models.Model):
+
+    id = models.UUIDField(primar_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=256)
+    publisher = models.CharField(max_length=256)
+    author_id = models.UUIDField(default=uuid.uuid4)
+
+    @property
+    def name_and_publisher(self):
+        return f'{self.name}, {self.publisher}'
+
+</code></pre>
+
+<ul>
+<li>Models <strong>must not</strong> have any complex functional logic in them.</li>
+<li>Models <strong>should</strong> own informational logic related to them.</li>
+<li>Models <strong>can</strong> have computed properties where it makes sense.</li>
+<li>Models <strong>must not</strong> import services, interfaces, or apis from their own domain or other domains.</li>
+<li>Table dependencies (such as ForeignKeys) <strong>must not</strong> exist across domains. Use a UUID field instead, and have your Services control the relationship between models. You <strong>can</strong> use ForeignKeys between tables in one domain. Be aware that this might hinder future refactoring.</li>
+</ul>
+<h2 id="apis">APIs</h2>
+<p>APIs defines the External API interface for your domain. Anyone using the APIs defined here is called a <em>consumer</em>. The API can be either an HTTP API using <a href="https://github.com/graphql-python">graphQL</a> or <a href="https://www.django-rest-framework.org/">REST</a> for consumers over the web, or a software API for internal consumers. APIs is defined in <code>apis.py</code> which is agnostic to the implementation you chose, and you can even put more than one API in a domain. For example - you might want to wrap a graphQL API <em>and</em> a REST API around your domain for different consumers.</p>
+<p>An apis.py file that defines a simple software API can look like:</p>
+<pre><code class="python">import logging
+import uuid
+from typing import Dict  # noqa
+
+from .services import BookService
+
+logger = logging.getLogger(__name__)
+
+
+class BookAPI:
+
+    @staticmethod
+    def get(*, book_id: uuid.UUID) -&gt; Dict:
+        logger.info('method &quot;get&quot; called')
+        return BookService.get_book(id=book_id)
+
+</code></pre>
+
+<ul>
+<li>APIs <strong>must be</strong> used as the entry point for all other consumers who wish to use this domain.</li>
+<li>APIs <strong>should</strong> own presentational logic and schema declarations.</li>
+<li>Internal domain-to-domain APIs <strong>should</strong> just be functions.</li>
+<li>You <strong>can</strong> group interal API functions under a class if it makes sense for organisation.</li>
+<li>If you are using a class for your internal APIs, it <strong>must</strong> use the naming convention <code>MyDomainAPI</code>.</li>
+<li>Internal functions in APIs <strong>must</strong> use type annotations.</li>
+<li>Internal functions in APIs <strong>must</strong> use keyword arguments.</li>
+<li>You <strong>should</strong> log API call functions.</li>
+<li>All data returned from APIs <strong>must be</strong> JSON serializable.</li>
+<li>APIs <strong>must</strong> talk to Services to get data.</li>
+<li>APIs <strong>must not</strong> talk to Models directly.</li>
+<li>APIs <strong>should</strong> do simple logic like transforming data for the outside world, or taking external data and transforming it for the domain to understand.</li>
+<li>Objects represented through APIs <strong>do not</strong> have to map directly to internal database representations of data.</li>
+</ul>
+<h2 id="interfaces">Interfaces</h2>
+<p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions with it in the interfaces.py file</strong>. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.</p>
+<p>Consider interfaces.py like a mini <em>Anti-Corruption Layer</em>. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in <code>interfaces.py</code> to reflect the change. No complex refactoring needed, woohoo!</p>
+<p>An interfaces.py may look like:</p>
+<pre><code class="python">import uuid
+from typing import Dict, Str  # noqa
+
+# Could be an internal domain or an HTTP API client - we don't care!
+from src.authors.apis import AuthorAPI
+
+
+# plain example
+def update_author_name(*, author_name: Str, author_id: uuid.UUID) -&gt; None:
+    AuthorAPI.update_author_name(
+        id=author_id,
+        name=author_name,
+    )
+
+
+# class example
+class AuthorInterface:
+
+    @staticmethod
+    def get_author(*, id: uuid.UUID) -&gt; Dict:
+        return AuthorAPI.get(id=id)
+
+    @staticmethod
+    def update_author_name(
+      *,
+      author_name: Str,
+      author_id: uuid.UUID,
+    ) -&gt; None:
+        AuthorAPI.update_author_name(
+            id=author_id,
+            name=author_name,
+        )
+
+</code></pre>
+
+<ul>
+<li>The primary components of Interfaces <strong>should</strong> be functions.</li>
+<li>You <strong>can</strong> group functions under a class if it makes sense for organisation.</li>
+<li>If you are using a class, it <strong>must</strong> use the naming convention <code>MyDomainInterface</code>.</li>
+<li>Functions in Interfaces <strong>must</strong> use type annotations.</li>
+<li>Functions in Interfaces <strong>must</strong> use keyword arguments.</li>
+</ul>
+<h2 id="services">Services</h2>
+<p>Everything in a domain comes together in Services.</p>
+<p>Services gather all the business value for this domain. What type of logic should live here? Here are a few examples:</p>
+<ul>
+<li>When creating a new instance of a model, we need to compute a field on it before saving.</li>
+<li>When querying some content, we need to collect it from a few different places and gather it together in a python object.</li>
+<li>When deleting an instance we need to send a signal to another domain so it can do it's own logic.</li>
+</ul>
+<p>Anything that is specific to the domain problem and <strong>not</strong> basic informational logic should live in Services. As most API projects expose single functional actions such as Create, Read, Update, and Delete, Services has been designed specifically to compliment stateless, single-action functions.</p>
+<p>A services.py file could look like:</p>
+<pre><code class="python">import logging
+import uuid
+from typing import Dict, Str  # noqa
+
+from .interfaces import AuthorInterface
+from .models import Book
+
+logger = logging.getLogger(__name__)
+
+
+# Plain example
+def get_book(*, id: uuid.UUID) -&gt; Book:
+    book = Book.objects.get(id=id)
+    author = AuthorInterface.get_author(id=book.author_id)
+    return {
+        'name': book.name,
+        'author_name': author.name,
+    }
+
+
+# Class example
+class PGMNodeService:
+
+    @staticmethod
+    def get_book(*, id: uuid.UUID) -&gt; Dict:
+        book = Book.objects.get(id=id)
+        author = AuthorInterface.get_author(id=book.author_id)
+        return {
+            'name': book.name,
+            'author_name': author.name,
+        }
+
+    @staticmethod
+    def create_book(*, name: Str, author_id: uuid.UUID) -&gt; Dict:
+        logger.info('Creating new book')
+        new_book = Book.objects.create(name=name, author_id=author_id)
+        author = AuthorInterface.get_author(id=new_book.author_id)
+        return {
+            'name': new_book.name,
+            'author_name': author.name,
+        }
+
+    @staticmethod
+    def update_book_name_and_author_name(
+        *,
+        name: Str,
+        author_name: Str,
+        author_id: uuid.UUID,
+        id: uuid.UUID,
+    ) -&gt; Dict:
+        logger.info('Updating book name and author name')
+        book = Book.objects.get(id=id).update(name=name)
+        author = AuthorInterface.update_author_name(
+            name=author_name, id=author_id,
+        )
+        return {
+            'name': book.name,
+            'author_name': author.name,
+        }
+
+</code></pre>
+
+<ul>
+<li>The primary components of Services <strong>should</strong> be functions.</li>
+<li>Services <strong>should</strong> own co-ordination and transactional logic.</li>
+<li>You <strong>can</strong> group functions under a class if it makes sense for organisation.</li>
+<li>If you are using a class, it <strong>must</strong> use the naming convention <code>MyDomainService</code>.</li>
+<li>Functions in services.py <strong>must</strong> use type annotations.</li>
+<li>Functions in services.py <strong>must</strong> use keyword arguments.</li>
+<li>You <strong>should</strong> be logging in services.py.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../styleguide/" class="btn btn-neutral" title="Styleguide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../styleguide/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
