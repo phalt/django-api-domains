@@ -3,6 +3,7 @@ theme: readthedocs
 
 pages:
     - Home: 'README.md'
+    - Using this guide: 'using.md'
     - Domains: 'domains.md'
     - Styleguide: 'styleguide.md'
     - Files: 'files.md'
