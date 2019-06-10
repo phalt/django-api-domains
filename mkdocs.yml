@@ -2,7 +2,7 @@ site_name: Django API Domains
 theme: readthedocs
 
 pages:
-    - Home: 'index.md'
+    - Home: 'README.md'
     - Domains: 'domains.md'
     - Styleguide: 'styleguide.md'
     - Files: 'files.md'
