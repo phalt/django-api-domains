@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Contributing - Django API Domains</title>
+  <title>Using this guide - Django API Domains</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Contributing";
-    var mkdocs_page_input_path = "contributing.md";
+    var mkdocs_page_name = "Using this guide";
+    var mkdocs_page_input_path = "using.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -53,9 +53,18 @@
     <a class="" href="..">Home</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../using/">Using this guide</a>
+    <a class="current" href="./">Using this guide</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#pin-against-a-version">Pin against a version</a></li>
+    
+
+    <li class="toctree-l2"><a href="#be-pragmatic">Be pragmatic</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -88,15 +97,9 @@
     <a class="" href="../appendix/">Appendix</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Contributing</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#found-an-issue">Found an issue?</a></li>
-    
-
-    </ul>
+    <a class="" href="../contributing/">Contributing</a>
 	    </li>
           
         </ul>
@@ -121,7 +124,7 @@
     
       
     
-    <li>Contributing</li>
+    <li>Using this guide</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -131,9 +134,14 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="found-an-issue">Found an issue?</h1>
-<p>Please <a href="https://github.com/phalt/django-api-domains/issues">file an issue here</a>. Please make sure the issue has not already be raised - search for it first.</p>
-<p>Please read the <a href="https://github.com/phalt/django-api-domains/blob/master/CODE_OF_CONDUCT.md">code of conduct</a> when contributing to the project.</p>
+                <h1 id="pin-against-a-version">Pin against a version</h1>
+<p>In software we often specify a version of a project to use.</p>
+<p>For example - <code>requests==1.2</code> - this says <em>"use requests version 1.2"</em>.</p>
+<p>For this guide, we recommend the following picking a specific version and working against it. Just like software; future versions of this guide could change and that would mean conflicting issues with the styleguide in your projects.</p>
+<p>You can see the released versions <a href="https://github.com/phalt/django-api-domains/releases">here</a> and by clicking on the tag icon you can view historical versions. The published version at <a href="https://phalt.github.io/django-api-domains">https://phalt.github.io/django-api-domains</a> will always be the latest version.</p>
+<h1 id="be-pragmatic">Be pragmatic</h1>
+<p>Don't blindly follow what other people have written down. Sometimes it might not be suitable for your own problem. Use this guide as inspiration and guidance, but make your own decisions with your team when you aren't satisfied with it.</p>
+<p>Just make sure you keep track of any additional rules you create.</p>
               
             </div>
           </div>
@@ -141,8 +149,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../domains/" class="btn btn-neutral float-right" title="Domains">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../appendix/" class="btn btn-neutral" title="Appendix"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -168,8 +178,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../appendix/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../domains/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
