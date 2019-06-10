@@ -1,4 +1,7 @@
-# Django API Domains styleguide
+![logo.png](diagrams/dads_logo.png)
+
+# Django API Domains
+_Style guides for the API age_
 
 | Version                                                             | Author(s)                                 | Date       |
 | ------------------------------------------------------------------- |-------------------------------------------|------------|
@@ -25,4 +28,10 @@ In order to overcome these problems, this styleguide tries to achieve the follow
 
 # Read the styleguide
 
+<<<<<<< HEAD
 The styleguide is now published as a readable documentation site. You can view it at [https://phalt.github.io/django-api-domains/](https://phalt.github.io/django-api-domains/) or view the [docs](docs/) folder directly.
+=======
+* Django's own documentation and recommendations: https://docs.djangoproject.com/en/dev/
+* The HackSoftware Django-styleguide: https://github.com/HackSoftware/Django-Styleguide
+* Model-driven engineering: https://en.wikipedia.org/wiki/Model-driven_engineering
+>>>>>>> 121f94e1b396709ccb5c8be21e40cb371b66c521
