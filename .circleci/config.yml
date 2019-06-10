@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build_docs:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Build Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Build and publish documentation
+          command: |
+            . venv/bin/activate
+            mkdocs gh-deploy
+workflows:
+  version: 2
+  build:
+    jobs:
+    - build_docs
