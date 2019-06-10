@@ -3,3 +3,10 @@ theme: readthedocs
 
 pages:
     - Home: 'index.md'
+    - Domains: 'domains.md'
+    - Styleguide: 'styleguide.md'
+    - Files: 'files.md'
+    - Examples: 'examples.md'
+    - Testing: 'testing.md'
+    - Appendix: 'appendix.md'
+    - Contributing: 'contributing.md'
