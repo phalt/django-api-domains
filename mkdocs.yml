@@ -8,6 +8,7 @@ pages:
     - Styleguide: 'styleguide.md'
     - Files: 'files.md'
     - Examples: 'examples.md'
+    - Plugins: 'plugins.md'
     - Testing: 'testing.md'
     - Appendix: 'appendix.md'
     - Contributing: 'contributing.md'
