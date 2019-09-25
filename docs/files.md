@@ -1,9 +1,13 @@
 
+### Examples on this page
+
 In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example **we also assume a book can only have one author.** It's a strange world.
 
 ## Models
 
-Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use _skinny models_ - no complex functional logic should live here. In the past Django has recommended an [active record](https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models) style for it's models. In practice, we have found that this encourages developers to make `models.py` bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the _"Where should logic live?"_ section above for clarification.
+Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use _skinny models_. No complex functional logic should live here.
+
+In the past Django has recommended an [active record](https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models) style for it's models. In practice, we have found that this encourages developers to make `models.py` bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the [_"Which logic lives where?"_](/styleguide/#which-logic-lives-where) section for clarification.
 
 A models.py file can look like:
 
@@ -29,12 +33,13 @@ class Book(models.Model):
 - Models **should** own informational logic related to them.
 - Models **can** have computed properties where it makes sense.
 - Models **must not** import services, interfaces, or apis from their own domain or other domains.
-- Table dependencies (such as ForeignKeys) **must not** exist across domains. Use a UUID field instead, and have your Services control the relationship between models. You **can** use ForeignKeys between tables in one domain. Be aware that this might hinder future refactoring.
+- Table dependencies (such as ForeignKeys) **must not** exist across domains. Use a UUID field instead, and have your Services control the relationship between models.
+- You **can** use ForeignKeys between tables in one domain. (But be aware that this might hinder future refactoring.)
 
 
 ## APIs
 
-APIs defines the External API interface for your domain. Anyone using the APIs defined here is called a _consumer_. The API can be either an HTTP API using [graphQL](https://github.com/graphql-python) or [REST](https://www.django-rest-framework.org/) for consumers over the web, or a software API for internal consumers. APIs is defined in `apis.py` which is agnostic to the implementation you chose, and you can even put more than one API in a domain. For example - you might want to wrap a graphQL API _and_ a REST API around your domain for different consumers.
+APIs defines the external API interface for your domain. Anyone using the APIs defined here is called a _consumer_. The API can be either an HTTP API using [GraphQL](https://github.com/graphql-python) or [REST](https://www.django-rest-framework.org/) for consumers over the web, or a software API for internal consumers. APIs is defined in `apis.py` which is agnostic to the implementation you choose, and you can even put more than one API in a domain. For example - you might want to wrap a GraphQL API _and_ a REST API around your domain for different consumers.
 
 An apis.py file that defines a simple software API can look like:
 
@@ -64,7 +69,7 @@ class BookAPI:
 - If you are using a class for your internal APIs, it **must** use the naming convention `MyDomainAPI`.
 - Internal functions in APIs **must** use type annotations.
 - Internal functions in APIs **must** use keyword arguments.
-- You **should** log API call functions.
+- You **should** log API function calls.
 - All data returned from APIs **must be** serializable.
 - APIs **must** talk to Services to get data.
 - APIs **must not** talk to Models directly.
@@ -77,6 +82,8 @@ class BookAPI:
 Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define **all interactions with it in the interfaces.py file**. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.
 
 Consider interfaces.py like a mini _Anti-Corruption Layer_. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in `interfaces.py` to reflect the change. No complex refactoring needed, woohoo!
+
+It's worth noting that some guides would consider this implementation a code smell because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the [pragmatism](/using/#be-pragmatic) point in our guide. If you find your `interfaces.py` is redundant, then you probably don't need it. That said: **we recommend starting with it and removing it later**.
 
 An interfaces.py may look like:
 
