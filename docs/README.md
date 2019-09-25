@@ -19,7 +19,7 @@ In order to overcome these problems, this styleguide tries to achieve the follow
 
 ## Current Version
 
-**CURRENT VERSION: [VERSION 1.2](https://github.com/phalt/django-api-domains/releases/tag/1.2)**
+**CURRENT VERSION: [VERSION 1.2.1](https://github.com/phalt/django-api-domains/releases/tag/1.2.1)**
 
 ## Previous Versions
 
