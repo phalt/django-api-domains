@@ -73,6 +73,9 @@
     <a class="current" href="./">Files</a>
     <ul class="subnav">
             
+    <li class="toctree-l2"><a href="#examples-on-this-page">Examples on this page</a></li>
+    
+
     <li class="toctree-l2"><a href="#models">Models</a></li>
     
 
@@ -145,9 +148,11 @@
           <div role="main">
             <div class="section">
               
-                <p>In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example <strong>we also assume a book can only have one author.</strong> It's a strange world.</p>
+                <h3 id="examples-on-this-page">Examples on this page</h3>
+<p>In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example <strong>we also assume a book can only have one author.</strong> It's a strange world.</p>
 <h2 id="models">Models</h2>
-<p>Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use <em>skinny models</em> - no complex functional logic should live here. In the past Django has recommended an <a href="https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models">active record</a> style for it's models. In practice, we have found that this encourages developers to make <code>models.py</code> bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the <em>"Where should logic live?"</em> section above for clarification.</p>
+<p>Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use <em>skinny models</em>. No complex functional logic should live here.</p>
+<p>In the past Django has recommended an <a href="https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models">active record</a> style for it's models. In practice, we have found that this encourages developers to make <code>models.py</code> bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the <a href="/styleguide/#which-logic-lives-where"><em>"Which logic lives where?"</em></a> section for clarification.</p>
 <p>A models.py file can look like:</p>
 <pre><code class="python">import uuid
 from django.db import models
@@ -171,10 +176,11 @@ class Book(models.Model):
 <li>Models <strong>should</strong> own informational logic related to them.</li>
 <li>Models <strong>can</strong> have computed properties where it makes sense.</li>
 <li>Models <strong>must not</strong> import services, interfaces, or apis from their own domain or other domains.</li>
-<li>Table dependencies (such as ForeignKeys) <strong>must not</strong> exist across domains. Use a UUID field instead, and have your Services control the relationship between models. You <strong>can</strong> use ForeignKeys between tables in one domain. Be aware that this might hinder future refactoring.</li>
+<li>Table dependencies (such as ForeignKeys) <strong>must not</strong> exist across domains. Use a UUID field instead, and have your Services control the relationship between models.</li>
+<li>You <strong>can</strong> use ForeignKeys between tables in one domain. (But be aware that this might hinder future refactoring.)</li>
 </ul>
 <h2 id="apis">APIs</h2>
-<p>APIs defines the External API interface for your domain. Anyone using the APIs defined here is called a <em>consumer</em>. The API can be either an HTTP API using <a href="https://github.com/graphql-python">graphQL</a> or <a href="https://www.django-rest-framework.org/">REST</a> for consumers over the web, or a software API for internal consumers. APIs is defined in <code>apis.py</code> which is agnostic to the implementation you chose, and you can even put more than one API in a domain. For example - you might want to wrap a graphQL API <em>and</em> a REST API around your domain for different consumers.</p>
+<p>APIs defines the external API interface for your domain. Anyone using the APIs defined here is called a <em>consumer</em>. The API can be either an HTTP API using <a href="https://github.com/graphql-python">GraphQL</a> or <a href="https://www.django-rest-framework.org/">REST</a> for consumers over the web, or a software API for internal consumers. APIs is defined in <code>apis.py</code> which is agnostic to the implementation you choose, and you can even put more than one API in a domain. For example - you might want to wrap a GraphQL API <em>and</em> a REST API around your domain for different consumers.</p>
 <p>An apis.py file that defines a simple software API can look like:</p>
 <pre><code class="python">import logging
 import uuid
@@ -202,7 +208,7 @@ class BookAPI:
 <li>If you are using a class for your internal APIs, it <strong>must</strong> use the naming convention <code>MyDomainAPI</code>.</li>
 <li>Internal functions in APIs <strong>must</strong> use type annotations.</li>
 <li>Internal functions in APIs <strong>must</strong> use keyword arguments.</li>
-<li>You <strong>should</strong> log API call functions.</li>
+<li>You <strong>should</strong> log API function calls.</li>
 <li>All data returned from APIs <strong>must be</strong> serializable.</li>
 <li>APIs <strong>must</strong> talk to Services to get data.</li>
 <li>APIs <strong>must not</strong> talk to Models directly.</li>
@@ -212,6 +218,7 @@ class BookAPI:
 <h2 id="interfaces">Interfaces</h2>
 <p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions with it in the interfaces.py file</strong>. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.</p>
 <p>Consider interfaces.py like a mini <em>Anti-Corruption Layer</em>. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in <code>interfaces.py</code> to reflect the change. No complex refactoring needed, woohoo!</p>
+<p>It's worth noting that some guides would consider this implementation a code smell because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the <a href="/using/#be-pragmatic">pragmatism</a> point in our guide. If you find your <code>interfaces.py</code> is redundant, then you probably don't need it. That said: <strong>we recommend starting with it and removing it later</strong>.</p>
 <p>An interfaces.py may look like:</p>
 <pre><code class="python">import uuid
 from typing import Dict, Str  # noqa

@@ -63,6 +63,15 @@
 
     <li class="toctree-l2"><a href="#be-pragmatic">Be pragmatic</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#protip">Protip</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#wording-in-this-guide">Wording in this guide</a></li>
+    
 
     </ul>
 	    </li>
@@ -140,13 +149,19 @@
             <div class="section">
               
                 <h1 id="pin-against-a-version">Pin against a version</h1>
-<p>In software we often specify a version of a project to use.</p>
-<p>For example - <code>requests==1.2</code> - this says <em>"use requests version 1.2"</em>.</p>
-<p>For this guide, we recommend the following picking a specific version and working against it. Just like software; future versions of this guide could change and that would mean conflicting issues with the styleguide in your projects.</p>
+<p>In software we often specify a version of a project to use. For example - <code>requests==1.2</code> - this says <em>"we want to use requests version 1.2"</em>.</p>
+<p>For this guide we recommend the following: picking a specific version and working against it. Just like software; future versions of this guide could change and that could cause conflicting issues with the styleguide in your project.</p>
 <p>You can see the released versions <a href="https://github.com/phalt/django-api-domains/releases">here</a> and by clicking on the tag icon you can view historical versions. The published version at <a href="https://phalt.github.io/django-api-domains">https://phalt.github.io/django-api-domains</a> will always be the latest version.</p>
 <h1 id="be-pragmatic">Be pragmatic</h1>
 <p>Don't blindly follow what other people have written down. Sometimes it might not be suitable for your own problem. Use this guide as inspiration and guidance, but make your own decisions with your team when you aren't satisfied with it.</p>
-<p>Just make sure you keep track of any additional rules you create.</p>
+<hr />
+<blockquote>
+<h3 id="protip">Protip</h3>
+<p>Keep track of any additional rules you make to keep your styleguide consistent!</p>
+</blockquote>
+<hr />
+<h1 id="wording-in-this-guide">Wording in this guide</h1>
+<p>Sometimes this guide refers to the following areas in a domain: <code>interfaces</code>, <code>apis</code>, <code>services</code>, and <code>models</code>. You can assume any code examples are from the file name of the same area. E.g. - code examples under an <code>apis</code> heading is meant for the <code>apis.py</code> file.</p>
               
             </div>
           </div>

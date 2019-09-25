@@ -145,22 +145,38 @@
             <div class="section">
               
                 <h1 id="domains">Domains</h1>
-<p>A <a href="https://en.wikipedia.org/wiki/Domain_(software_engineering)">domain</a> is a piece of software that provides distinct business value within the context of your application.</p>
-<p>Within the context of software, what this styleguide calls a <code>domain</code> is roughly an extension of what Django would call an <code>app</code>. Therefore a <em>business</em> domain <strong>should</strong> have at least one distinct <em>software</em> domain mirroring it.</p>
-<h2 id="examples-in-this-guide">Examples in this guide</h2>
-<p>The examples in this guide will talk about a <code>book shop</code> that must share details about books. This can be modelled as a <em>domain</em> called <code>books</code>, and as a <em>software domain</em> also called <code>books</code>.</p>
-<p>We keep the key benefits of Django's <code>app</code> pattern - namely Django's <a href="https://docs.djangoproject.com/en/2.1/topics/db/models/">models</a> to represent tables in a datastore, with an emphasis on <strong>skinny models</strong>. We also retain Django's ability to <em>package apps as installable components in other applications</em>. This allows domains to be easily migrated to different codebases or completely different projects.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Domain_(software_engineering)">domain</a> is a piece of software that provides a distinct <strong>business</strong> value for your application.</p>
+<p>What this styleguide calls a <code>domain</code> is roughly an extension of what Django would call an <code>app</code>. Therefore a business domain <strong>should</strong> have at least one distinct software domain mirroring it.</p>
+<hr />
+<blockquote>
+<h3 id="examples-in-this-guide">Examples in this guide</h3>
+<p>The examples in this guide will talk about a <code>book shop</code> that shares details about books.
+This can be modelled as a <em>domain</em> called <code>books</code>, and as a <em>software domain</em> also called <code>books</code>.</p>
+</blockquote>
+<hr />
+<p>This guide tries to keep the key benefits of Django's <code>app</code> pattern - namely Django's <a href="https://docs.djangoproject.com/en/2.1/topics/db/models/">models</a> to represent tables in a datastore, but with an emphasis on <strong>skinny models</strong>.</p>
+<p>This guide also retain Django's ability to <em>package apps as installable components in other applications</em>. This allows domains to be easily migrated to different codebases or completely different projects.</p>
 <h2 id="domain-rules">Domain rules</h2>
-<p>There are two high-level rules around domains:</p>
+<p>There are two major rules around domains:</p>
 <ol>
-<li>You <strong>should</strong> split a domain if it becomes too big to work on.</li>
+<li>
+<p>You <strong>should</strong> split a domain if it becomes too big to work on.</p>
+<p>A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking the software has not diverged too far from the styleguide.</p>
+</li>
 </ol>
-<p>As a rule of thumb is that a domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking the software has not diverged too far from the styleguide.</p>
+<hr />
 <ol>
-<li>You <strong>should</strong> adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.</li>
-</ol>
+<li>
+<p>You <strong>should</strong> adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.</p>
 <p>This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between each other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<h3 id="protip">Protip</h3>
 <p>An example <em>software</em> domain is provided in the same directory as this styleguide under <a href="https://github.com/phalt/django-api-domains/tree/master/example_domain">example_domain/</a>.</p>
+</blockquote>
+<hr />
 <p>Next, we will discuss the styleguide in detail.</p>
               
             </div>

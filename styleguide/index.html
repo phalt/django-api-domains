@@ -79,6 +79,18 @@
 
     <li class="toctree-l2"><a href="#which-logic-lives-where">Which logic lives where?</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#apis">APIs</a></li>
+        
+            <li><a class="toctree-l3" href="#services">Services</a></li>
+        
+            <li><a class="toctree-l3" href="#models">Models</a></li>
+        
+            <li><a class="toctree-l3" href="#interfaces">Interfaces</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -151,15 +163,19 @@
 <ul>
 <li>A domain <strong>must</strong> use the following file structure:</li>
 </ul>
-<pre><code>apis.py - Public functions and access points, presentation logic.
-interfaces.py - Integrations with other domains or external services.
-models.py - Object models and storage, simple information logic.
-services.py - coordination and transactional logic.
+<pre><code>- apis.py - Public functions and access points, presentation logic.
+- interfaces.py - Integrations with other domains or external services.
+- models.py - Object models and storage, simple information logic.
+- services.py - coordination and transactional logic.
 </code></pre>
 
-<p>In addition, any existing files from a standard Django app are still allowed, such as <code>urls.py</code>, <code>apps.py</code> and <code>migrations/*</code>. <code>Views.py</code> in <a href="https://docs.djangoproject.com/en/dev/#the-view-layer">Django's pattern</a> is <strong>explicitly not allowed</strong> in this styleguide pattern as we only focus on API-based applications. Most logic that used to live in Django's <code>views.py</code> would now be separated into <code>apis.py</code> and <code>services.py</code>.</p>
+<p>In addition, any existing files from a standard Django app are still allowed, such as <code>urls.py</code>, <code>apps.py</code> and <code>migrations/*</code>.</p>
 <ul>
-<li>You <strong>can</strong> mask one of the required files as a directory for better file organisation. For example, you might want to split <code>apis.py</code> into this file structure:</li>
+<li><code>Views.py</code> in <a href="https://docs.djangoproject.com/en/dev/#the-view-layer">Django's pattern</a> is <strong>explicitly not allowed</strong> in this styleguide.</li>
+</ul>
+<p>We only focus on API-based applications. Most logic that used to live in Django's <code>views.py</code> would now be separated into APIs and Services.</p>
+<ul>
+<li>You <strong>can</strong> mask one of the required files as a directory for better file organisation. For example, you might want to split <code>apis.py</code> file into this structure:</li>
 </ul>
 <pre><code>apis/
   __init__.py
@@ -181,7 +197,7 @@ from domain.apis import Foo
 <p>This keeps namespaces tidy and does not leak domain details.</p>
 <ul>
 <li>
-<p>A domain <strong>does not</strong> need to have all these files if it is not using them. For example - a domain that just coordinates API calls to other domains does not need to have <code>models.py</code> as it is probably not storing anything in a datastore.</p>
+<p>A domain <strong>does not</strong> need to have all these files if it is not using them. For example - a domain that just coordinates API calls to other domains does not need to have Models as it is probably not storing anything in a datastore.</p>
 </li>
 <li>
 <p>A domain <strong>can have</strong> additional files when it makes sense (such as <code>utils.py</code> or <code>enums.py</code> or <code>serializers.py</code>) to separate out parts of the code that aren't covered by the styleguide pattern.</p>
@@ -199,12 +215,40 @@ from domain.apis import Foo
 <p>TL;DR - relative imports inside a domain, absolute for everything else!</p>
 <p>With this ruling domains are easy to package and move around. When it comes time to move it into it's own project; tidying up imports will be one less thing you have to do.</p>
 <h2 id="which-logic-lives-where">Which logic lives where?</h2>
-<p>It's common in programming to end up confused about what type of logic should live where - should it go in the <code>apis.py</code>, the <code>models.py</code>, or the <code>services.py</code>? There are many cases where it's difficult to decide, and the best advice is to <strong>pick a pattern and stick to it</strong>, but for simpler things, this guide emphasises the following:</p>
-<ul>
-<li><code>apis.py</code> - logic about presentation (Where should I show this data to the user? Where do I define the API schema?)</li>
-<li><code>services.py</code> - logic around coordination and transactions (Where do I coordinate updating many models in one domain? Where do I dispatch a single action out to other domains?)</li>
-<li><code>models.py</code> - logic around information (Where can I store this data? Where can I do any post/pre-save actions?) and derived information computed by already existing information</li>
-</ul>
+<p>It's common in programming to end up confused about what type of logic should live where.</p>
+<p>There are many cases where it's difficult to decide, and the best advice is to <strong>pick a pattern and stick to it</strong>, but for simpler things, this guide emphasises the following:</p>
+<h3 id="apis">APIs</h3>
+<p>Logic about presentation.</p>
+<hr />
+<blockquote>
+<p><strong>If you ask:</strong>
+"Where should I show this data to the user?" or "Where do I define the API schema?"</p>
+</blockquote>
+<hr />
+<h3 id="services">Services</h3>
+<p>Logic around coordination and transactions.</p>
+<hr />
+<blockquote>
+<p><strong>If you ask:</strong>
+"Where do I coordinate updating many models in one domain?" or "Where do I dispatch a single action out to other domains?"</p>
+</blockquote>
+<hr />
+<h3 id="models">Models</h3>
+<p>Logic around information.</p>
+<hr />
+<blockquote>
+<p><strong>If you ask:</strong>
+"Where can I store this data?" or  "Where can I do any post/pre-save actions?"</p>
+</blockquote>
+<hr />
+<h3 id="interfaces">Interfaces</h3>
+<p>Logic handling the transformation of data from other domains.</p>
+<hr />
+<blockquote>
+<p><strong>If you ask:</strong>
+"Where shall I connect to another domain?" or "How do I change the data format for another domain?"</p>
+</blockquote>
+<hr />
               
             </div>
           </div>
