@@ -1,3 +1,15 @@
+1.2.1 | 25-09-2019
+================
+
+- Fixed a lot of grammar issues.
+- Fixed some styling stuff to make things easier to read.
+- A note on shall methods / pass-through methods code-smell.
+- A note on wording.
+
+Contributors:
+
+- Paul Hallett (Author)
+
 1.2 | 10-06-2019
 ================
 
