@@ -9,7 +9,7 @@ What this styleguide calls a `domain` is roughly an extension of what Django wou
 > ### Examples in this guide
 
 > The examples in this guide will talk about a `book shop` that shares details about books.
-> This can be modelled as a _domain_ called `books`, and as a _software domain_ also called `books`.
+> This can be modelled as a _business domain_ called `books`, and as a _software domain_ also called `books`.
 
 ---
 
