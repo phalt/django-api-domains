@@ -160,7 +160,7 @@ from django.db import models
 
 class Book(models.Model):
 
-    id = models.UUIDField(primar_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=256)
     publisher = models.CharField(max_length=256)
     author_id = models.UUIDField(default=uuid.uuid4)
@@ -204,7 +204,7 @@ class BookAPI:
 <li>APIs <strong>must be</strong> used as the entry point for all other consumers who wish to use this domain.</li>
 <li>APIs <strong>should</strong> own presentational logic and schema declarations.</li>
 <li>Internal domain-to-domain APIs <strong>should</strong> just be functions.</li>
-<li>You <strong>can</strong> group interal API functions under a class if it makes sense for organisation.</li>
+<li>You <strong>can</strong> group internal API functions under a class if it makes sense for organisation.</li>
 <li>If you are using a class for your internal APIs, it <strong>must</strong> use the naming convention <code>MyDomainAPI</code>.</li>
 <li>Internal functions in APIs <strong>must</strong> use type annotations.</li>
 <li>Internal functions in APIs <strong>must</strong> use keyword arguments.</li>
@@ -216,7 +216,7 @@ class BookAPI:
 <li>Objects represented through APIs <strong>do not</strong> have to map directly to internal database representations of data.</li>
 </ul>
 <h2 id="interfaces">Interfaces</h2>
-<p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions with it in the interfaces.py file</strong>. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.</p>
+<p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions with it in the <code>interfaces.py</code> file</strong>. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.</p>
 <p>Consider interfaces.py like a mini <em>Anti-Corruption Layer</em>. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in <code>interfaces.py</code> to reflect the change. No complex refactoring needed, woohoo!</p>
 <p>It's worth noting that some guides would consider this implementation a code smell because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the <a href="/using/#be-pragmatic">pragmatism</a> point in our guide. If you find your <code>interfaces.py</code> is redundant, then you probably don't need it. That said: <strong>we recommend starting with it and removing it later</strong>.</p>
 <p>An interfaces.py may look like:</p>
