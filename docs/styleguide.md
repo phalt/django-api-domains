@@ -36,7 +36,7 @@ from .rest import *  # noqa
 from .graphql import *  # noqa
 ```
 
-Then, any other file can then import from apis like so:
+Then, any other file can import from apis like so:
 
 ```python
 # example.py
@@ -105,7 +105,7 @@ Logic around information.
 
 ### Interfaces
 
-Logic handling the transformation of data from other domains.
+Logic for handling the transformation of data from other domains.
 
 ---
 

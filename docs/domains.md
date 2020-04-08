@@ -15,7 +15,7 @@ What this styleguide calls a `domain` is roughly an extension of what Django wou
 
 This guide tries to keep the key benefits of Django's `app` pattern - namely Django's [models](https://docs.djangoproject.com/en/2.1/topics/db/models/) to represent tables in a datastore, but with an emphasis on **skinny models**.
 
-This guide also retain Django's ability to *package apps as installable components in other applications*. This allows domains to be easily migrated to different codebases or completely different projects.
+This guide also retains Django's ability to *package apps as installable components in other applications*. This allows domains to be easily migrated to different codebases or completely different projects.
 
 ## Domain rules
 
@@ -23,13 +23,13 @@ There are two major rules around domains:
 
 1. You **should** split a domain if it becomes too big to work on.
 
-    A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking the software has not diverged too far from the styleguide.
+    A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking whether the software has not diverged too far from the styleguide.
 
 ---
 
 2. You **should** adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.
 
-    This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between each other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.
+    This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between one other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.
 
 
 ---
