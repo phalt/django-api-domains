@@ -29,7 +29,7 @@ There are two major rules around domains:
 
 2. You **should** adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.
 
-    This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between one other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.
+    This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between one another. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.
 
 
 ---
