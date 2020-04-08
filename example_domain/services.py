@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 # Plain example
-def get_book(*, id: uuid.UUID) -> Book:
+def get_book(*, id: uuid.UUID) -> Dict:
     book = Book.objects.get(id=id)
     author = AuthorInterface.get_author(id=book.author_id)
     return {
