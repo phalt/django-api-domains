@@ -20,4 +20,8 @@ workflows:
   version: 2
   build:
     jobs:
-    - build_docs
+    - build_docs:
+        filters:
+          branches:
+            only:
+              - master
