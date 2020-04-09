@@ -79,7 +79,7 @@ class BookAPI:
 
 ## Interfaces
 
-Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define **all interactions the other domain in the `interfaces.py` file**. Combined with APIs (see above), this forms the bounded context of the domain and prevents domain logic from leaking in.
+Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define **all interactions to the other domain in the `interfaces.py` file**. Combined with APIs (see above), this forms the bounded context of the domain and prevents domain logic from leaking in.
 
 Consider `interfaces.py` like a mini _Anti-Corruption Layer_. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into its own web service, your domain only needs to update the code in `interfaces.py` to reflect the change. No complex refactoring needed, woohoo!
 
