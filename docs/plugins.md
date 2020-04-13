@@ -1,4 +1,4 @@
-We recommend the following plugins for use with this guide.
+We recommend the following plugins for use with this guide:
 
 ## Django REST Framework
 
@@ -19,7 +19,7 @@ Additional ruling for DRF:
 
 [Graphene-Django](https://docs.graphene-python.org/projects/django/en/latest/) is the recommended framework for creating [GraphQL](https://graphql.org/) APIs with Django.
 
-When using Graphen-Django, we can organis the logic in a domain this way:
+When using Graphen-Django, we can organise the logic in a domain this way:
 
 - `apis.py` - Queries and Mutations.
 

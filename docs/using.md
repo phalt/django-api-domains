@@ -2,7 +2,7 @@
 
 In software we often specify a version of a project to use. For example - `requests==1.2` - this says _"we want to use requests version 1.2"_.
 
-For this guide we recommend the following: picking a specific version and working against it. Just like software; future versions of this guide could change and that could cause conflicting issues with the styleguide in your project.
+For this guide we recommend the following: picking a specific version and working against it. Just like software; future versions of this guide could change, potentially causing conflicts with the styleguide in your project.
 
 You can see the released versions [here](https://github.com/phalt/django-api-domains/releases) and by clicking on the tag icon you can view historical versions. The published version at [https://phalt.github.io/django-api-domains](https://phalt.github.io/django-api-domains) will always be the latest version.
 
