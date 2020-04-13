@@ -155,20 +155,20 @@ This can be modelled as a <em>business domain</em> called <code>books</code>, an
 </blockquote>
 <hr />
 <p>This guide tries to keep the key benefits of Django's <code>app</code> pattern - namely Django's <a href="https://docs.djangoproject.com/en/2.1/topics/db/models/">models</a> to represent tables in a datastore, but with an emphasis on <strong>skinny models</strong>.</p>
-<p>This guide also retain Django's ability to <em>package apps as installable components in other applications</em>. This allows domains to be easily migrated to different codebases or completely different projects.</p>
+<p>This guide also retains Django's ability to <em>package apps as installable components in other applications</em>. This allows domains to be easily migrated to different codebases or completely different projects.</p>
 <h2 id="domain-rules">Domain rules</h2>
 <p>There are two major rules around domains:</p>
 <ol>
 <li>
 <p>You <strong>should</strong> split a domain if it becomes too big to work on.</p>
-<p>A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking the software has not diverged too far from the styleguide.</p>
+<p>A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking whether the software has not diverged too far from the styleguide.</p>
 </li>
 </ol>
 <hr />
 <ol>
 <li>
 <p>You <strong>should</strong> adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.</p>
-<p>This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between each other. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.</p>
+<p>This applies even in situations where you extract one domain into two domains to increase velocity, but they still have to maintain a dependency between one another. We have found that if you relax the bounded context between domains, the boundary will erode and you will lose the ability to work on them independent of each other.</p>
 </li>
 </ol>
 <hr />

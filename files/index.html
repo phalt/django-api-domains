@@ -149,10 +149,10 @@
             <div class="section">
               
                 <h3 id="examples-on-this-page">Examples on this page</h3>
-<p>In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example <strong>we also assume a book can only have one author.</strong> It's a strange world.</p>
+<p>In the examples below we imagine a service with two domains - one for books, and one for authors. The abstraction between books and authors is only present to demonstrate the concepts in the styleguide. You could argue that Books and Authors can live in one domain. In our example <strong>we also assume that a book can only have one author.</strong> It's a strange world.</p>
 <h2 id="models">Models</h2>
-<p>Models defines how a data model/ database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use <em>skinny models</em>. No complex functional logic should live here.</p>
-<p>In the past Django has recommended an <a href="https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models">active record</a> style for it's models. In practice, we have found that this encourages developers to make <code>models.py</code> bloated and do too much - often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the <a href="/styleguide/#which-logic-lives-where"><em>"Which logic lives where?"</em></a> section for clarification.</p>
+<p><em>Models</em> defines how a data model / database table looks. This is a Django convention that remains mostly unchanged. The key difference here is that you use <em>skinny models</em>. No complex functional logic should live here.</p>
+<p>In the past Django has recommended an <a href="https://docs.djangoproject.com/en/2.1/misc/design-philosophies/#models">active record</a> style for its models. In practice, we have found that this encourages developers to bloat <code>models.py</code>, making it do too much and often binding the presentation and functional logic of a domain too tightly. This makes it very hard to have abstract presentations of the data in a domain. Putting all the logic in one place also makes it difficult to scale the number of developers working in this part of the codebase. See the <a href="/styleguide/#which-logic-lives-where"><em>"Which logic lives where?"</em></a> section for clarification.</p>
 <p>A models.py file can look like:</p>
 <pre><code class="python">import uuid
 from django.db import models
@@ -180,8 +180,8 @@ class Book(models.Model):
 <li>You <strong>can</strong> use ForeignKeys between tables in one domain. (But be aware that this might hinder future refactoring.)</li>
 </ul>
 <h2 id="apis">APIs</h2>
-<p>APIs defines the external API interface for your domain. Anyone using the APIs defined here is called a <em>consumer</em>. The API can be either an HTTP API using <a href="https://github.com/graphql-python">GraphQL</a> or <a href="https://www.django-rest-framework.org/">REST</a> for consumers over the web, or a software API for internal consumers. APIs is defined in <code>apis.py</code> which is agnostic to the implementation you choose, and you can even put more than one API in a domain. For example - you might want to wrap a GraphQL API <em>and</em> a REST API around your domain for different consumers.</p>
-<p>An apis.py file that defines a simple software API can look like:</p>
+<p><em>APIs</em> defines the external API interface for your domain. Anyone using the APIs defined here is called a <em>consumer</em>. The API can be either an HTTP API using <a href="https://github.com/graphql-python">GraphQL</a> or <a href="https://www.django-rest-framework.org/">REST</a> for consumers over the web, or a software API for internal consumers. APIs is defined in <code>apis.py</code> which is agnostic to the implementation you choose, you can even put more than one API in a domain. For example - you might want to wrap a GraphQL API <em>and</em> a REST API around your domain for different consumers.</p>
+<p>An <code>apis.py</code> file that defines a simple software API can look like:</p>
 <pre><code class="python">import logging
 import uuid
 from typing import Dict  # noqa
@@ -216,10 +216,10 @@ class BookAPI:
 <li>Objects represented through APIs <strong>do not</strong> have to map directly to internal database representations of data.</li>
 </ul>
 <h2 id="interfaces">Interfaces</h2>
-<p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions with it in the <code>interfaces.py</code> file</strong>. Combined with APIs (see above), this forms the bounded context of the domain, and prevents domain logic leaking in.</p>
-<p>Consider interfaces.py like a mini <em>Anti-Corruption Layer</em>. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into it's own web service, your domain only needs to update the code in <code>interfaces.py</code> to reflect the change. No complex refactoring needed, woohoo!</p>
-<p>It's worth noting that some guides would consider this implementation a code smell because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the <a href="/using/#be-pragmatic">pragmatism</a> point in our guide. If you find your <code>interfaces.py</code> is redundant, then you probably don't need it. That said: <strong>we recommend starting with it and removing it later</strong>.</p>
-<p>An interfaces.py may look like:</p>
+<p>Your domain may need to communicate with another domain. That domain can be in another web server across the web, or it could be within the same server. It could even be a third-party service. When your domain needs to talk to other domains, you should define <strong>all interactions to the other domain in the <code>interfaces.py</code> file</strong>. Combined with APIs (see above), this forms the bounded context of the domain and prevents domain logic from leaking in.</p>
+<p>Consider <code>interfaces.py</code> like a mini <em>Anti-Corruption Layer</em>. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into its own web service, your domain only needs to update the code in <code>interfaces.py</code> to reflect the change. No complex refactoring needed, woohoo!</p>
+<p>It's worth noting that some guides would consider this implementation a 'code smell' because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the <a href="/using/#be-pragmatic">pragmatism</a> point in our guide. If you find your <code>interfaces.py</code> is redundant, then you probably don't need it. That said: <strong>we recommend starting with it and removing it later</strong>.</p>
+<p>An <code>interfaces.py</code> may look like:</p>
 <pre><code class="python">import uuid
 from typing import Dict, Str  # noqa
 
@@ -264,14 +264,14 @@ class AuthorInterface:
 </ul>
 <h2 id="services">Services</h2>
 <p>Everything in a domain comes together in Services.</p>
-<p>Services gather all the business value for this domain. What type of logic should live here? Here are a few examples:</p>
+<p><em>Services</em> gather all the business value for this domain. What type of logic should live here? Here are a few examples:</p>
 <ul>
 <li>When creating a new instance of a model, we need to compute a field on it before saving.</li>
 <li>When querying some content, we need to collect it from a few different places and gather it together in a python object.</li>
 <li>When deleting an instance we need to send a signal to another domain so it can do it's own logic.</li>
 </ul>
-<p>Anything that is specific to the domain problem and <strong>not</strong> basic informational logic should live in Services. As most API projects expose single functional actions such as Create, Read, Update, and Delete, Services has been designed specifically to compliment stateless, single-action functions.</p>
-<p>A services.py file could look like:</p>
+<p>Anything that is specific to the domain problem and <strong>not</strong> basic informational logic should live in Services. As most API projects expose single functional actions such as Create, Read, Update, and Delete, <em>Services</em> has been designed specifically to compliment stateless, single-action functions.</p>
+<p>A <code>services.py</code> file could look like:</p>
 <pre><code class="python">import logging
 import uuid
 from typing import Dict, Str  # noqa
@@ -283,7 +283,7 @@ logger = logging.getLogger(__name__)
 
 
 # Plain example
-def get_book(*, id: uuid.UUID) -&gt; Book:
+def get_book(*, id: uuid.UUID) -&gt; Dict:
     book = Book.objects.get(id=id)
     author = AuthorInterface.get_author(id=book.author_id)
     return {
@@ -341,7 +341,7 @@ class PGMNodeService:
 <li>If you are using a class, it <strong>must</strong> use the naming convention <code>MyDomainService</code>.</li>
 <li>Functions in services.py <strong>must</strong> use type annotations.</li>
 <li>Functions in services.py <strong>must</strong> use keyword arguments.</li>
-<li>You <strong>should</strong> be logging in services.py.</li>
+<li>You <strong>should</strong> be logging in <code>services.py</code>.</li>
 </ul>
               
             </div>
