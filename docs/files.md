@@ -83,7 +83,7 @@ Your domain may need to communicate with another domain. That domain can be in a
 
 Consider `interfaces.py` like a mini _Anti-Corruption Layer_. Most of the time it won't change and it'll just pass on arguments to an API function. But when the other domain moves - say you extract it into its own web service, your domain only needs to update the code in `interfaces.py` to reflect the change. No complex refactoring needed, woohoo!
 
-It's worth noting that some guides would consider this implementation a 'code smell' because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the [pragmatism](/using/#be-pragmatic) point in our guide. If you find your `interfaces.py` is redundant, then you probably don't need it. That said: **we recommend starting with it and removing it later**.
+It's worth noting that some guides would consider this implementation a 'code smell' because it has the potential for creating shallow methods or pass-through methods. This is somewhat true, and leads us back to the [pragmatism](/django-api-domains/using/#be-pragmatic) point in our guide. If you find your `interfaces.py` is redundant, then you probably don't need it. That said: **we recommend starting with it and removing it later**.
 
 An `interfaces.py` may look like:
 
