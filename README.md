@@ -1,3 +1,5 @@
+⚠️ Currently unmaintained and out of date ⚠️
+
 ![logo.png](diagrams/dads_logo.png)
 
 # Django API Domains
