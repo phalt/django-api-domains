@@ -1,4 +1,4 @@
-⚠️ [Currently looking for feedback from users](https://github.com/phalt/django-api-domains/issues/31) ⚠️
+⚠️ [Currently stable and unlikely to change much, provide feedback here](https://github.com/phalt/django-api-domains/issues/31) ⚠️
 
 ![logo.png](diagrams/dads_logo.png)
 
