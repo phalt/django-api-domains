@@ -25,7 +25,7 @@ There are two major rules around domains:
 
     A domain should allow between 4-6 developers (3 pairs) to comfortably work on it. If you find your developers being blocked by each other then it is time to consider splitting the domain or checking whether the software has not diverged too far from the styleguide.
 
----
+    ---
 
 2. You **should** adhere to the styleguide patterns in this document in order to maintain strong bounded contexts between your domains.
 
