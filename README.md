@@ -1,5 +1,7 @@
 ⚠️ [Currently stable and unlikely to change much, provide feedback here](https://github.com/phalt/django-api-domains/issues/31) ⚠️
 
+### Check out my new project for OpenAPI Clients: [Clientele](https://github.com/phalt/clientele)
+
 ![logo.png](diagrams/dads_logo.png)
 
 # Django API Domains
